@@ -1,0 +1,59 @@
+# CD.yml
+#
+# Nessa pipeline, é feito o deploy da aplicação para o ambiente de produção.
+# Você pode customizar essa pipeline para fazer o deploy para o ambiente que desejar.
+# Como exemplo, iremos realizar o deploy para o ambiente de produção utilizando o Docker.
+
+name: CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-docker-image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build application
+        run: pnpm build
+
+      - name: Build Docker image
+        run: docker build --build-arg VITE_APP_NAME="Vite App" --build-arg VITE_AUTH_STORAGE_KEY="auth" --build-arg VITE_BACKEND_API_URL="http://localhost:5000" --build-arg VITE_HOME_PAGE="/users" -t 2025-base-vite-front-react .
+
+      #
+      # Exemplo de deploy da imagem do projeto para o Docker Hub e Kubernetes
+      #
+      # - name: Login to Docker Hub
+      #   run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      # - name: Push Docker image
+      #   run: docker tag nextjs15-boilerplate "${{ secrets.DOCKER_USERNAME }}/nextjs15-boilerplate:latest" && docker push "${{ secrets.DOCKER_USERNAME }}/nextjs15-boilerplate:latest"
+
+      # - name: Deploy application
+      #   run: |
+      #     kubectl set image deployment/nextjs15-boilerplate nextjs15-boilerplate="${{ secrets.DOCKER_USERNAME }}/nextjs15-boilerplate:latest"
+      #     kubectl rollout status deployment/nextjs15-boilerplate
+

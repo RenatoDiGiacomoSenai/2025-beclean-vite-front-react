@@ -1,0 +1,78 @@
+# CI.yml
+#
+# Nessa pipeline, é verificado se o código está seguindo as boas práticas de desenvolvimento, como lint, testes e tipagem.
+# Aqui também é verificado se todos os testes estão passando, tanto os unitários quanto os de integração.
+
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typescript check types
+        run: pnpm check-types
+
+      - name: Lint
+        run: npx lint-staged
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run unit tests with vitest
+        run: pnpm test
+
+      - name: Install Cypress
+        run: npx cypress install
+
+      - name: Run e2e tests with Cypress
+        uses: cypress-io/github-action@v6
+        with:
+          build: pnpm build
+          start: npx vite --host
+          wait-on: 'http://localhost:3000'
