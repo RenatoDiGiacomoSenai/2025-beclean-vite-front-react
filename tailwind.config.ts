@@ -79,7 +79,7 @@ const config: Config = {
       },
       fontSize: {
         xs: '0.75rem',
-        sm: '0.875rem',
+        sm: '5rem',
         md: '1rem',
         lg: '1.125rem',
         xl: '1.25rem',

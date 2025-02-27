@@ -18,6 +18,8 @@ import {
   EditExercisesRoute,
   ListExercisesRoute,
 } from '@features/exercises/pages'
+import { ListUsersRoute } from '@features/users/pages'
+import { TokenInsertRoute } from '@shared/authentication/components/ForgetForm'
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -35,11 +37,17 @@ const rootRoute = createRootRoute({
 })
 
 const routeTree = rootRoute.addChildren([
-  PublicRoutes.addChildren([LoginRoute, ForgetRoute, PrivacyRoute]),
+  PublicRoutes.addChildren([
+    LoginRoute,
+    ForgetRoute,
+    PrivacyRoute,
+    TokenInsertRoute,
+  ]),
   PrivateRoutes.addChildren([
     ListExercisesRoute,
     CreateExercisesRoute,
     EditExercisesRoute,
+    ListUsersRoute,
   ]),
 ])
 

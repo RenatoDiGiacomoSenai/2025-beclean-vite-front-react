@@ -8,7 +8,7 @@ import {
   PRIVACY_PAGE_ROUTE,
 } from '@shared/authentication/pages'
 import { useAuth } from '@shared/authentication/context'
-import logo from '@assets/logo.svg'
+import logo from '@assets/login-logo.svg'
 
 const LoginFormSchema = z.object({
   email: z.string().min(1, 'Campo Obrigatório').email('E-mail inválido'),
@@ -38,7 +38,7 @@ function LoginForm() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-6 p-14">
           <span className="flex flex-col">
-            <img src={logo} width={100} alt="" />
+            <img src={logo} width={150} alt="" />
           </span>
           <span className="flex flex-col pb-4">
             <h4 className=" text-title-h4">Pureza que transforma</h4>
@@ -46,8 +46,8 @@ function LoginForm() {
               Para ter acesso a plataforma entre com as suas credencias
             </p>
           </span>
-          <span className="flex flex-col gap-6">
-            <span className="flex flex-col gap-4">
+          <span className="flex flex-col gap-7">
+            <div className="flex flex-col gap-3">
               <TextInput
                 label="E-mail"
                 placeholder="Digite seu e-mail"
@@ -60,7 +60,7 @@ function LoginForm() {
                 error={{ description: errors.password?.message }}
                 {...register('password')}
               />
-            </span>
+            </div>
             <Button
               label="Login"
               isLoading={loading}
@@ -77,7 +77,7 @@ function LoginForm() {
               Esqueceu a senha?
             </Link>
 
-            <p className="text-muted">
+            <p className="text-muted" style={{display: 'none'}}> {/* hidden Aguardando Se vai existir essa sessão*/}
               Ao acessar e utilizar a plataforma, você concorda com com nossa{' '}
               <Link
                 to={PRIVACY_PAGE_ROUTE}

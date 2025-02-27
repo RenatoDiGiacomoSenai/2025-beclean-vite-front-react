@@ -15,3 +15,15 @@ body {
 .private-layout-height {
   height: calc(100vh - 96px);
 }
+
+#char-input {
+  width: 90px;
+  height: 92px;
+  text-align: center;
+  flex-direction: column;
+  gap: 0;
+  border: 2px solid gray;
+}
+#char-input:focus {
+  border: 2px solid black;
+}

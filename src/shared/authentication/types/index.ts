@@ -15,5 +15,11 @@ export interface AuthUser {
 }
 
 export enum UserRoles {
-  Admin = 0,
+  Admin = 0, /* Backoffice */
+  Operator = 1, /* don't use yet */
+  Consumer = 2, /* Mobile */
 }
+
+
+
+

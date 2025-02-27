@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import logo from '@assets/logo.png'
+import logo from '@assets/logo.svg'
 
 const { VITE_APP_NAME, VITE_HOME_PAGE } = import.meta.env
 

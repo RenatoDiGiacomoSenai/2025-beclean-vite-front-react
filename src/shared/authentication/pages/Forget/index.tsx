@@ -1,6 +1,6 @@
 import { createRoute } from '@tanstack/react-router'
 import { PublicRoutes } from '@shared/layouts/PublicLayout'
-import ForgetForm from '@shared/authentication/components/ForgetForm'
+import ForgetForm from '@shared/authentication/components/ForgetForm/SendEmail'
 
 function ForgetPage() {
   return (
