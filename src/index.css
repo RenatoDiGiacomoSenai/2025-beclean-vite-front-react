@@ -23,6 +23,8 @@ body {
   flex-direction: column;
   gap: 0;
   border: 2px solid gray;
+  border-radius: 6px;
+  font-size: 4rem;
 }
 #char-input:focus {
   border: 2px solid black;

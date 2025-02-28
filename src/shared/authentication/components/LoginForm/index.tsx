@@ -34,9 +34,9 @@ function LoginForm() {
   }
 
   return (
-    <div className="w-full md:w-[608px]">
+    <div className="w-full md:w-[608px] p-12">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-6 p-14">
+        <div className="flex flex-col gap-6">
           <span className="flex flex-col">
             <img src={logo} width={150} alt="" />
           </span>

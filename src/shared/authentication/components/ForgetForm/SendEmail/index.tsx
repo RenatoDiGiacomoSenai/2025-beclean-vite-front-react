@@ -1,14 +1,14 @@
+import logo from '@assets/login-logo.svg'
+import { PublicRoutes } from '@shared/layouts'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { TextInput, Button } from '@istic-ui/react'
 import { createRoute, Link } from '@tanstack/react-router'
-import { LOGIN_PAGE_ROUTE } from '@shared/authentication/pages'
 import { useAuth } from '@shared/authentication/context'
-import logo from '@assets/login-logo.svg'
+import { LOGIN_PAGE_ROUTE } from '@shared/authentication/pages'
 
 import TokenInsert from '../TokenInsert'
-import { PrivateRoutes, PublicRoutes } from '@shared/layouts'
 
 const ForgetFormSchema = z.object({
   email: z.string().min(1, 'Campo Obrigatório').email('E-mail inválido'),
@@ -31,10 +31,9 @@ function SendEmail() {
   }
 
   return (
-    <div className="w-full md:w-[608px] rounded-md bg-white p-12">
+    <div className="w-full md:w-[608px] p-12">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-6">
-
           <div className="flex flex-col gap-4">
             <span className="flex flex-col">
               <img src={logo} width={164} alt="" />
@@ -57,14 +56,9 @@ function SendEmail() {
               {...register('email')}
             />
 
-            <Button
-              style={{ backgroundColor: '#212529' }}
-              label="Enviar"
-              
-            />
-            <Link to={TOKEN_INSERT_PAGE_ROUTE}>Teste</Link>
+            <Button style={{ backgroundColor: '#212529' }} label="Enviar" />
           </div>
-          
+
           <div className="flex flex-col gap-4 text-center">
             <span className="mr-2 flex items-center justify-center">
               <div className="mr-2">
