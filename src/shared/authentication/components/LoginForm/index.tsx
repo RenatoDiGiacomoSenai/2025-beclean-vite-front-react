@@ -66,8 +66,7 @@ function LoginForm() {
               isLoading={loading}
               style={{ backgroundColor: '#212529' }}
             />
-
-            {error && <p className="text-red-500">{"Algum Erro Aconteceu"}</p>}
+            {error && <p className="text-red-500">{error}</p>}
           </span>
           <span className="flex flex-col gap-6">
             <Link
@@ -77,7 +76,8 @@ function LoginForm() {
               Esqueceu a senha?
             </Link>
 
-            <p className="text-muted" style={{display: 'none'}}> {/* hidden Aguardando Se vai existir essa sessão*/}
+            <p className="text-muted" style={{ display: 'none' }}>
+              {/* hidden Aguardando Se vai existir essa sessão*/}
               Ao acessar e utilizar a plataforma, você concorda com com nossa{' '}
               <Link
                 to={PRIVACY_PAGE_ROUTE}

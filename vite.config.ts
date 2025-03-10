@@ -8,8 +8,8 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://beclean-dev-api.azurewebsites.net/api',
-        changeOrigin: true,
+        target: 'https://beclean-dev-api.azurewebsites.net/Api',
+        changeOrigin: false,
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },

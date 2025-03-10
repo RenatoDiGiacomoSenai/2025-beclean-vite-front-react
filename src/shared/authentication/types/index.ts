@@ -12,6 +12,7 @@ export interface AuthUser {
   email: string
   role: UserRoles
   exp: number
+  token?: string
 }
 
 export enum UserRoles {
