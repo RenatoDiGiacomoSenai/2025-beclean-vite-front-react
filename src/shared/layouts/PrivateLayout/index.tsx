@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { createRoute, Outlet, useNavigate } from '@tanstack/react-router'
 import { rootRoute } from '@settings/tanstack-router'
 import { useAuth } from '@shared/authentication/context'
-import Menu from '@shared/components/Menu'
 import Header from '@shared/components/Header'
 
 function PrivateLayout() {
@@ -17,11 +16,10 @@ function PrivateLayout() {
   }, [authenticated])
 
   return (
-    <div className="h-full flex">
-      <Menu opened={opened} toggle={() => setOpened(!opened)} />
+    <div className="h-full flex bg-gray-100">
       <div className="flex-1">
         <Header toggle={() => setOpened(!opened)} />
-        <main>
+        <main className='bg-white m-8 p-4 h-5/6 rounded-lg'>
           <Outlet />
         </main>
       </div>

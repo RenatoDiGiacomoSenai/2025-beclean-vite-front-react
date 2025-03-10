@@ -1,22 +1,28 @@
-// import { AxiosResponse } from 'axios'
 import { AuthUser, UserRoles } from '../types'
 
 import { api } from './apiAxios'
 
 export default {
   async login(email: string, password: string): Promise<void> {
-    
+    // if (email !== 'admin@email.com' || password !== 'senai@134') {
+    //   throw new Error('Usuário ou senha inválidos')
+    // }
+    const authUser = await api.post<AuthUser>('/auth', { email, password });
 
-    if (email !== 'admin@email.com' || password !== 'senai@134') {
-      throw new Error('Usuário ou senha inválidos')
-    }
-    const authUser = await api.post<AuthUser>('/auth', { email, password })
-    const resp: AxiosResponse<AuthUser> = authUser
-    console.log(resp.data)
+
+    console.log(authUser)
+    console.log(authUser.status)
+    // const resp: AxiosResponse<AuthUser> = authUser
+    // console.log(resp.data)
     // localStorage.setItem('token', authUser.data.token)
-    
 
-    localStorage.setItem('isAuthenticated', 'true')
+
+    /*
+      admin@beclean.com
+      Admin@123
+    */
+
+    // localStorage.setItem('isAuthenticated', 'true')
   },
 
   async logout(): Promise<void> {

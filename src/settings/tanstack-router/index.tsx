@@ -1,4 +1,3 @@
-import { RiOpenArmLine } from 'react-icons/ri'
 import { MenuItemProps } from '@shared/components/MenuItem'
 import {
   createRootRoute,
@@ -30,8 +29,8 @@ const rootRoute = createRootRoute({
   ),
   notFoundComponent: () => (
     <div>
-      <p>This is the notFoundComponent configured on root route</p>
-      <Link to="/">Start Over</Link>
+      <p>Não tem Component Inserido na Rota</p>
+      <Link className='bg-red-500' to="/">Voltar</Link>
     </div>
   ),
 })
@@ -58,9 +57,36 @@ const router = createRouter({
 
 const menuItems: MenuItemProps[] = [
   {
-    icon: <RiOpenArmLine />,
-    label: 'Exercícios',
+    label: 'Análises',
     to: '/exercises',
+  },
+  {
+    label: 'Anúncios',
+    to: '/ads',
+  },
+  {
+    label: 'Produtos',
+    to: '/products',
+  },
+  {
+    label: 'Destaques',
+    to: '/highlights',
+  },
+  {
+    label: 'Ingredientes',
+    to: '/ingredients',
+  },
+  {
+    label: 'Certificações',
+    to: '/certifications',
+  },
+  {
+    label: 'Parceiros',
+    to: '/partners',
+  },
+  {
+    label: 'Usuários',
+    to: '/users',
   },
 ]
 

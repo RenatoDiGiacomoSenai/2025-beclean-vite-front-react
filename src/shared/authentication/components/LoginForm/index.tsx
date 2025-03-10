@@ -67,7 +67,7 @@ function LoginForm() {
               style={{ backgroundColor: '#212529' }}
             />
 
-            {error && <p className="text-red-500">{error}</p>}
+            {error && <p className="text-red-500">{"Algum Erro Aconteceu"}</p>}
           </span>
           <span className="flex flex-col gap-6">
             <Link

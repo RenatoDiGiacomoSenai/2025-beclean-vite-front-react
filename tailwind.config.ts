@@ -75,12 +75,12 @@ const config: Config = {
         },
       },
       fontFamily: {
-        default: ['Merriweather', 'serif'],
+        default: ['"Onset", sans-serif'],
       },
       fontSize: {
         xs: '0.75rem',
-        sm: '5rem',
-        md: '1rem',
+        sm: '1rem',
+        md: '1.05rem',
         lg: '1.125rem',
         xl: '1.25rem',
         'button-xs': '0.75rem',
@@ -95,7 +95,7 @@ const config: Config = {
         'title-h5': '1.25rem', 
       },
       fontWeight: {
-        regular: '400', 
+        regular: '200', 
         medium: '500',
         bold: '700',
       },
