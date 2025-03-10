@@ -24,14 +24,14 @@ function ExercisesList() {
         }}
         columns={[
           {
-            index: 'title',
-            label: 'Título',
+            index: 'codebar',
+            label: 'Codigo de Barras',
           },
           {
-            index: 'place',
-            label: 'Local',
+            index: 'requirements',
+            label: 'Quantidade de Solicitações',
             render: (item) =>
-              item.place === ExercisePlace.Gym ? 'Academia' : 'Casa',
+              item.place === ExercisePlace.Gym ? 'Academia' : 'Casa', //AJUSTE
           },
           {
             index: 'repetitions',

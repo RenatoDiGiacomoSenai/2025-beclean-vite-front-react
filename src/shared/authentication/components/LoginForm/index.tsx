@@ -47,6 +47,7 @@ function LoginForm() {
             </p>
           </span>
           <span className="flex flex-col gap-7">
+            
             <div className="flex flex-col gap-3">
               <TextInput
                 label="E-mail"
@@ -61,6 +62,7 @@ function LoginForm() {
                 {...register('password')}
               />
             </div>
+
             <Button
               label="Login"
               isLoading={loading}
