@@ -12,13 +12,16 @@ import {
   LoginRoute,
   PrivacyRoute,
 } from '@shared/authentication/pages'
-import {
-  CreateExercisesRoute,
-  EditExercisesRoute,
-  ListExercisesRoute,
-} from '@features/exercises/pages'
 import { ListUsersRoute } from '@features/users/pages'
-import { ResetPasswordRoute, TokenInsertRoute } from '@shared/authentication/components/ForgetForm'
+import {
+  ResetPasswordRoute,
+  TokenInsertRoute,
+} from '@shared/authentication/components/ForgetForm'
+import {
+  ListAnalysisRoute,
+  CreateAnalysisRoute,
+  EditAnalysisRoute,
+} from '@features/analysis/pages'
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -30,7 +33,9 @@ const rootRoute = createRootRoute({
   notFoundComponent: () => (
     <div>
       <p>Não tem Component Inserido na Rota</p>
-      <Link className='bg-red-500' to="/">Voltar</Link>
+      <Link className="bg-red-500" to="/">
+        Voltar
+      </Link>
     </div>
   ),
 })
@@ -41,12 +46,12 @@ const routeTree = rootRoute.addChildren([
     ForgetRoute,
     PrivacyRoute,
     TokenInsertRoute,
-    ResetPasswordRoute
+    ResetPasswordRoute,
   ]),
   PrivateRoutes.addChildren([
-    ListExercisesRoute,
-    CreateExercisesRoute,
-    EditExercisesRoute,
+    ListAnalysisRoute,
+    CreateAnalysisRoute,
+    EditAnalysisRoute,
     ListUsersRoute,
   ]),
 ])
@@ -58,7 +63,7 @@ const router = createRouter({
 const menuItems: MenuItemProps[] = [
   {
     label: 'Análises',
-    to: '/exercises',
+    to: '/analysis',
   },
   {
     label: 'Anúncios',
