@@ -5,11 +5,11 @@ import AnalysisList from '@features/analysis/components/List'
 
 function ListAnalysisPage() {
   return (
-    <>
+    <div className="flex flex-col gap-4 h-full">
       <div className="flex justify-between items-center">
-        <div className="flex flex-col gap-8 pb-4">
+        <div className="flex flex-col gap-8">
           <div>
-            <h1 className="text-2xl font-bold text-neutral-900">Análises</h1>
+            <h1 className=" text-2xl font-bold text-neutral-900">Análises</h1>
             <p className="text-gray-500">
               Gerencie as análises de produtos que os consumidores enviaram.
             </p>
@@ -17,8 +17,10 @@ function ListAnalysisPage() {
         </div>
         <AnalysisFilters />
       </div>
-      <AnalysisList />
-    </>
+      <div className=''>
+        <AnalysisList />
+      </div>
+    </div>
   )
 }
 

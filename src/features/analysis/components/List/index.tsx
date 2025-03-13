@@ -11,10 +11,11 @@ function AnalysisList() {
   return (
     <Table
       classNames={{
-        bodyCell: '',
-        bodyRow: '  hover:bg-brand-50',
-        headCell: 'text-muted text-xs ',
+        bodyCell: 'bg-white',
+        bodyRow: 'bg-white hover:bg-brand-50',
+        headCell: 'bg-neutral-50 text-muted text-xs',
       }}
+      paddingInline={116}
       columns={[
         {
           index: 'barCode',
@@ -58,7 +59,6 @@ function AnalysisList() {
       ]}
       data={analysis?.items || []}
       isLoading={loading}
-      paddingInline={analysis?.pagination.pageCount}
     />
   )
 }

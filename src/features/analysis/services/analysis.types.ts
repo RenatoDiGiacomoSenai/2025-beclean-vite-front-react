@@ -1,36 +1,22 @@
-// import { ApiListQuery, ApiListResponse } from '@shared/types'
+import { ApiListQuery, ApiListResponse } from '@shared/types'
 
-// export interface Exercise {
-//   id: string
-//   title: string
-//   description: string
-//   imageUrl: string | null
-//   type: ExerciseType
-//   place: ExercisePlace
-//   repetitions: number
-//   isActive: boolean
-//   object: string | null
-// }
+export interface AnalysisType {
+  id: string
+  name: string
+  classificationScore: number
+  barCode: string
+  requests: number
+  status: AnalysisStatus
+}
 
-// export enum ExerciseType {
-//   OpenAir,
-// }
+export enum AnalysisStatus {
+  'Concluido',
+  'Em Analise',
+}
 
-// export enum ExercisePlace {
-//   Home,
-//   Gym,
-// }
 
-// export type ExerciseItem = Pick<
-//   Exercise,
-//   'id' | 'title' | 'place' | 'repetitions' | 'isActive'
-// >
+export type AnalysisListResponse = ApiListResponse<AnalysisItem>
 
-// export type ExerciseListResponse = ApiListResponse<ExerciseItem>
+export type AnalysisItem = Pick<AnalysisType, 'id' | 'barCode' | 'requests' | 'status'>
 
-// export type ExerciseListQuery = Partial<
-//   Pick<Exercise, 'place' | 'type' | 'object' | 'title'>
-// > &
-//   ApiListQuery
-
-// export type ExerciseRequest = Omit<Exercise, 'id'> & { id?: string }
+export type AnalysisListQuery = Partial<Pick<AnalysisType, 'id' | 'barCode' | 'requests' | 'status'>> & ApiListQuery

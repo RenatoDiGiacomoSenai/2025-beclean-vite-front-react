@@ -1,6 +1,4 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useToast } from '@shared/context'
-
 
 import productService from './analysis.service'
 
@@ -15,6 +13,8 @@ export function useAnalysis(query?:any) {
     queryKey: ['analysis', query],
     queryFn: async () => productService.getAnalisys(),
   })
+
+  
 
   return { analysis, loading, refetch }
 }
