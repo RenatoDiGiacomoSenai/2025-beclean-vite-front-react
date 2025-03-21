@@ -83,6 +83,24 @@ export function AuthProvider({ children }: { readonly children: ReactNode }) {
     }
   }, [])
 
+  useEffect(() => {
+    const handleAuthTimeout = async () => {
+      const isAuthenticated = await authService.isAuthenticated()
+
+      if (isAuthenticated) {
+        const logoutTime = setTimeout(async () => {
+          await authService.logout()
+        }, 30 * 60 * 1000)
+
+        return () => {
+          clearTimeout(logoutTime)
+        }
+      }
+    }
+
+    handleAuthTimeout()
+  }, [])
+
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 

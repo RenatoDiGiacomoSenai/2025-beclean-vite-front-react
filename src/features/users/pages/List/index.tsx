@@ -1,10 +1,45 @@
+'use client'
+import React, { useEffect } from 'react'
 import { createRoute } from '@tanstack/react-router'
 import { PrivateRoutes } from '@shared/layouts/PrivateLayout'
 import AddUserBtn from '@features/users/components/AddUserBtn'
 import UserFilters from '@features/users/components/Filter'
 import UserList from '@features/users/components/List'
+import CreationUserModal from '@features/users/components/UserModal'
+import { UserDataProps, UserRoles, useUsers } from '@features/users/services'
+import userService from '@features/users/services/user.service'
+import { useToast } from '@shared/context'
+
 
 function ListUsersPage() {
+  const { users, loading } = useUsers()
+  const { showToast } = useToast()
+
+  const [modal, setModal] = React.useState<boolean>(false)
+  const [data, setData] = React.useState<UserDataProps>({
+    name: '',
+    email: '',
+    password: 'Admin@123',
+    type: 'string' as UserRoles,
+  })
+
+  useEffect(() => {
+    setData((prev: UserDataProps) => ({ ...prev, type: prev.type }))
+  }, [])
+
+  const handleCreateUser = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    try {
+      userService.createUser(data, showToast,setModal)
+      
+    } catch (error) {
+      throw new Error(
+        typeof error === 'string' ? error : 'An unknown error occurred',
+      )
+    }
+  }
+
   return (
     <div className="flex flex-col gap-4 h-full">
       <div className="flex justify-between items-center gap-9 ">
@@ -18,10 +53,16 @@ function ListUsersPage() {
         </div>
         <div className="flex justify-between gap-2 items-center align-middle">
           <UserFilters />
-          <AddUserBtn />
+          <AddUserBtn setModal={setModal} modal={modal} />
         </div>
       </div>
-      <UserList/>
+      <UserList loading={loading} users={users}/>
+      <CreationUserModal
+        createUser={setData}
+        sendForm={(e) => handleCreateUser(e!)}
+        modal={modal}
+        setModal={setModal}
+      />
     </div>
   )
 }

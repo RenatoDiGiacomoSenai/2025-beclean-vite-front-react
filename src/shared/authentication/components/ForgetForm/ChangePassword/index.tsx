@@ -1,4 +1,3 @@
-import React from 'react'
 import { Button, TextInput } from '@istic-ui/react'
 import { createRoute, Link } from '@tanstack/react-router'
 import { PublicRoutes } from '@shared/layouts'

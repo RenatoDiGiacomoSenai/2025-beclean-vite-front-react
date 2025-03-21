@@ -1,7 +1,7 @@
 import { createRoute } from '@tanstack/react-router'
 import { PrivateRoutes } from '@shared/layouts'
-import AnalysisFilters from '@features/analysis/components/Filters'
 import AnalysisList from '@features/analysis/components/List'
+import AnalysisFilters from '@features/analysis/components/FIlters'
 
 function ListAnalysisPage() {
   return (

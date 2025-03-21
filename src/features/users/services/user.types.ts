@@ -5,13 +5,23 @@ export interface UserTypes {
   name: string
   email: string
   type: UserRoles
+  avatar?: string | null
+  avatar_url?: string | null
   createdAt: string
   modifiedAt: string
-  deletedAt?: string | null
+  deletedAt: null
+}
+
+export interface UserDataProps {
+  name: string
+  email: string
+  password?: string
+  type: UserRoles
 }
 
 export enum UserRoles {
-  admin,
+  ADMIN = 'ADMIN',
+  CONSUMER = 'CONSUMER',
 }
 
 export type UserListResponse = ApiListResponse<UserItem>

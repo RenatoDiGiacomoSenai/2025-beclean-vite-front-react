@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import productService from './analysis.service'
 
@@ -19,19 +19,19 @@ export function useAnalysis(query?:any) {
   return { analysis, loading, refetch }
 }
 
-export function useExerciseById(id?: string) {
-  const {
-    data: exercise,
-    isLoading: loading,
-    refetch,
-  } = useQuery({
-    queryKey: ['exercises', id],
-    enabled: !!id,
-    queryFn: async () => exercisesService.getExerciseById(id),
-  })
+// export function useExerciseById(id?: string) {
+//   const {
+//     data: exercise,
+//     isLoading: loading,
+//     refetch,
+//   } = useQuery({
+//     queryKey: ['exercises', id],
+//     enabled: !!id,
+//     queryFn: async () => exercisesService.getExerciseById(id),
+//   })
 
-  return { exercise, loading, refetch }
-}
+//   return { exercise, loading, refetch }
+// }
 
 // export function useCreateExercise() {
 //   const { showToast } = useToast()

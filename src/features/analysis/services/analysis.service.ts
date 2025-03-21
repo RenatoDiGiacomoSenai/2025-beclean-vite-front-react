@@ -1,7 +1,7 @@
-import { api } from '@shared/authentication/services/apiAxios'
+
 
 export default {
-  async getAnalisys(query?: any) {
+  async getAnalisys() {
    
     const dataItens = {
       pagination: {

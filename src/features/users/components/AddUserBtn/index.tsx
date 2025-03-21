@@ -1,7 +1,15 @@
 import React from 'react'
 import { Button } from '@istic-ui/react'
 
-function AddUserBtn() {
+
+type AddUserBtnProps = {
+  modal: boolean
+  setModal: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+function AddUserBtn(props: AddUserBtnProps) {
+  const { modal, setModal } = props
+
   return (
     <Button
       iconProps={{
@@ -9,7 +17,8 @@ function AddUserBtn() {
         iconPosition: 'left',
       }}
       label="Criar Novo Usuário"
-      size='xs'
+      size="xs"
+      onClick={() => setModal(!modal)}
     />
   )
 }

@@ -66,3 +66,9 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background-color: #555;
 }
+
+
+/*custom dropdown color delete*/
+#deleteOption{
+  color: #fc0606;
+}

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+
 import { ActionIcon, Table } from '@istic-ui/react'
 import { router } from '@settings/tanstack-router'
 import { useAnalysis } from '@features/analysis/services/analysis.hooks'
@@ -46,7 +46,7 @@ function AnalysisList() {
           index: 'actions',
           label: '',
           width: '30px',
-          render: (item) => (
+          render: () => (
             <div className="flex gap-2">
               <ActionIcon
                 iconName="more-2"

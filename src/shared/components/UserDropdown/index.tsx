@@ -1,4 +1,4 @@
-import { Avatar, DropdownMenu, Icon, Text } from '@istic-ui/react'
+import { Avatar, DropdownMenu, Text,  } from '@istic-ui/react'
 import { useAuth } from '@shared/authentication/context'
 
 function UserDropdown() {
@@ -23,21 +23,17 @@ function UserDropdown() {
           </div>
         </button>
       }
+      items={[
+        {
+          id: 'logout',
+          iconName: 'logout',
+          label: 'Sair',
+          onClick: () => signOut?.(),
+        }
+      ]}
     >
-      <div className="w-[140px] bg-white rounded-md shadow-md">
-        <button
-          className="w-full flex flex-row justify-start items-center gap-2 p-4 text-left hover:bg-neutral-50 rounded-xl text-error"
-          type="button"
-          onClick={async () => {
-            signOut && (await signOut())
-          }}
-        >
-          <Icon name="logout" color="inherit" size={20} />
-          <Text size="sm" color="text-inherit">
-            Sair
-          </Text>
-        </button>
-      </div>
+    
+      
     </DropdownMenu>
   )
 }
