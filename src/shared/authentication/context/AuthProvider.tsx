@@ -48,8 +48,12 @@ export function AuthProvider({ children }: { readonly children: ReactNode }) {
     })
   }
 
-  const recovery = async (email: string) => {
-    await handle(() => authService.recovery(email))
+  const recovery = async (email: string): Promise<void> => {
+    return authService.recovery(email)
+  }
+
+  const insertToken = async (token: string): Promise<void> => {
+    return authService.receiveToken(token)
   }
 
   const value = useMemo(
@@ -62,6 +66,7 @@ export function AuthProvider({ children }: { readonly children: ReactNode }) {
       signIn,
       signOut,
       recovery,
+      insertToken
     }),
     [authenticated, error, loading, user],
   )
@@ -88,9 +93,12 @@ export function AuthProvider({ children }: { readonly children: ReactNode }) {
       const isAuthenticated = await authService.isAuthenticated()
 
       if (isAuthenticated) {
-        const logoutTime = setTimeout(async () => {
-          await authService.logout()
-        }, 30 * 60 * 1000)
+        const logoutTime = setTimeout(
+          async () => {
+            await authService.logout()
+          },
+          30 * 60 * 1000,
+        )
 
         return () => {
           clearTimeout(logoutTime)

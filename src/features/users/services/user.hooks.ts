@@ -11,7 +11,6 @@ export function useUsers(query?: UserTypes) {
   } = useQuery({
     queryKey: ['users', query],
     queryFn: async () => userService.getUsers(),
-    gcTime: 1000,
   })
 
   return { users, loading, refetch }

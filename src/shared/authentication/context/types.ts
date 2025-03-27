@@ -8,4 +8,5 @@ export type AuthContextType = {
   signIn?: (email: string, password: string) => Promise<void>
   signOut?: () => Promise<void>
   recovery?: (email: string) => Promise<void>
+  insertToken?: (token: string) => Promise<void>
 }

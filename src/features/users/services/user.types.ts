@@ -24,9 +24,8 @@ export enum UserRoles {
   CONSUMER = 'CONSUMER',
 }
 
-export type UserListResponse = ApiListResponse<UserItem>
-
 export type UserItem = Pick<UserTypes, 'id' | 'name' | 'email'>
 
-export type AnalysisListQuery = Partial<Pick<UserTypes, 'id' | 'name'>> &
-  ApiListQuery
+export type UserListResponse = ApiListResponse<UserItem>
+
+export type UsersListQuery = Partial<Pick<UserTypes, 'name'>> & ApiListQuery

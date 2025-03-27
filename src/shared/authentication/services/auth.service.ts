@@ -37,9 +37,11 @@ export default {
   },
 
   async recovery(email: string): Promise<void> {
-    if (email !== 'admin@email.com') {
-      throw new Error('Email não encontrado')
-    }
+    return await api.post('/User/requestResetPassword', { email })
+  },
+
+  async receiveToken(token: string): Promise<void> {
+    await api.post('/User/validTokenPassword', { token })
   },
 
   async getUser(): Promise<AuthUser> {

@@ -4,9 +4,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { TextInput, Button } from '@istic-ui/react'
-import { createRoute, Link } from '@tanstack/react-router'
+import { createRoute, Link, useRouter } from '@tanstack/react-router'
 import { useAuth } from '@shared/authentication/context'
 import { LOGIN_PAGE_ROUTE } from '@shared/authentication/pages'
+import { useContext } from 'react'
+import { ToastContext } from '@shared/context'
 
 import TokenInsert from '../TokenInsert'
 
@@ -17,6 +19,8 @@ const ForgetFormSchema = z.object({
 type ForgetFormType = z.infer<typeof ForgetFormSchema>
 
 function SendEmail() {
+  const router = useRouter()
+  const { showToast } = useContext(ToastContext)
   const { recovery } = useAuth()
   const {
     register,
@@ -27,7 +31,24 @@ function SendEmail() {
   })
 
   const onSubmit = (data: ForgetFormType) => {
-    recovery && recovery(data.email)
+    recovery &&
+      recovery(data.email)
+        .then(() => {
+          showToast({
+            type: 'success',
+            title: 'E-mail enviado com sucesso',
+            message: 'Verifique seu E-mail ',
+          })
+          router.navigate({ to: TOKEN_INSERT_PAGE_ROUTE })
+        })
+        .catch((error) => {
+          showToast({
+            type: 'error',
+            title: 'Algo deu Errado',
+            message: `${error.response.data.message}`,
+          })
+          console.error(error)
+        })
   }
 
   return (

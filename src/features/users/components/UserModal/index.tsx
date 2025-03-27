@@ -6,7 +6,7 @@ import ModalComponent from './CreationUserModal'
 type CreationUserModalProps = {
   modal: boolean
   setModal: React.Dispatch<React.SetStateAction<boolean>>
-  createUser: (data: React.SetStateAction<UserTypes>) => void
+  createUser:React.Dispatch<React.SetStateAction<UserTypes>> 
   sendForm: (e?: React.FormEvent<HTMLFormElement>) => void
 }
 

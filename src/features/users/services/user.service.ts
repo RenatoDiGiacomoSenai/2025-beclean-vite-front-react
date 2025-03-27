@@ -2,17 +2,17 @@ import { api } from '@shared/authentication/services/apiAxios'
 import { ToastProps } from '@istic-ui/react'
 import { AxiosError } from 'axios'
 
-import { UserDataProps } from './user.types'
-
+import { UserDataProps, UsersListQuery } from './user.types'
 
 //teste2@teste.com
 export default {
   // ! Listar Usuário
-  async getUsers() {
+  async getUsers(query?: UsersListQuery) {
+    
     const res = await api.get('/User')
 
-    if (!res.data) {
-      return []
+    if (query) {
+      return {}
     } else {
       return res?.data.items
     }
@@ -24,7 +24,7 @@ export default {
     setModal: React.Dispatch<React.SetStateAction<boolean>>,
   ) {
     try {
-await api.post('/User/me', data)
+      await api.post('/User/me', data)
 
       showToast({
         title: 'Usuário criado com sucesso',
@@ -34,16 +34,16 @@ await api.post('/User/me', data)
       setModal(false)
       window.location.reload()
     } catch (error) {
-
       if ((error as AxiosError).response?.status === 400) {
         showToast({
           title: 'Usuário já cadastrado',
-          message: 'O e-mail informado está cadastrado ou já foi cadastrado no sistema',
-          type: 'error', 
+          message:
+            'O e-mail informado está cadastrado ou já foi cadastrado no sistema',
+          type: 'error',
           durationInMs: 10000,
         })
       }
-      
+
       throw new Error(`Something went wrong ${error}`)
     }
   },
