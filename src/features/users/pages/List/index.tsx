@@ -10,7 +10,6 @@ import { UserDataProps, UserRoles, useUsers } from '@features/users/services'
 import userService from '@features/users/services/user.service'
 import { useToast } from '@shared/context'
 
-
 function ListUsersPage() {
   const { users, loading } = useUsers()
   const { showToast } = useToast()
@@ -31,8 +30,7 @@ function ListUsersPage() {
     e.preventDefault()
 
     try {
-      userService.createUser(data, showToast,setModal)
-      
+      userService.createUser(data, showToast, setModal)
     } catch (error) {
       throw new Error(
         typeof error === 'string' ? error : 'An unknown error occurred',
@@ -52,11 +50,26 @@ function ListUsersPage() {
           </div>
         </div>
         <div className="flex justify-between gap-2 items-center align-middle">
+          {/*
+          Componente de filtro de usuários
+          */}
           <UserFilters />
+          {/*
+          Botão de adicionar usuário
+          */}
+
           <AddUserBtn setModal={setModal} modal={modal} />
         </div>
       </div>
-      <UserList loading={loading} users={users}/>
+
+      {/*
+        Componente de listagem de usuários
+        */}
+      <UserList loading={loading} users={users} />
+
+      {/*
+        Modal de criação de usuário
+      */}
       <CreationUserModal
         createUser={setData}
         sendForm={(e) => handleCreateUser(e!)}
