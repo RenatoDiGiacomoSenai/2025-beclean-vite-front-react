@@ -56,6 +56,17 @@ export function AuthProvider({ children }: { readonly children: ReactNode }) {
     return authService.receiveToken(token)
   }
 
+  const changePassword = async (
+    token: string,
+    password: string,
+  ): Promise<void> => {
+    console.warn(token)
+    console.warn(password)
+    console.warn(typeof password)
+
+    return authService.changePassword(token, password)
+  }
+
   const value = useMemo(
     () => ({
       ...authContextInitialState,
@@ -66,7 +77,8 @@ export function AuthProvider({ children }: { readonly children: ReactNode }) {
       signIn,
       signOut,
       recovery,
-      insertToken
+      insertToken,
+      changePassword
     }),
     [authenticated, error, loading, user],
   )

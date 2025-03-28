@@ -38,7 +38,9 @@ function SendEmail() {
             type: 'success',
             title: 'E-mail enviado com sucesso',
             message: 'Verifique seu E-mail ',
+            
           })
+          localStorage.setItem('email', data.email)
           router.navigate({ to: TOKEN_INSERT_PAGE_ROUTE })
         })
         .catch((error) => {

@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAuth } from '@shared/authentication/context'
 import logo from '@assets/login-logo.svg'
@@ -7,6 +7,8 @@ import { Button } from '@istic-ui/react'
 import CharInput from '@shared/components/TokenInput'
 import { Link } from '@tanstack/react-router'
 import { z } from 'zod'
+import { router } from '@settings/tanstack-router'
+import { ToastContext } from '@shared/context'
 
 const ForgetFormSchema = z.object({
   inputToken: z.string().min(4, 'Campo Obrigatório'),
@@ -16,11 +18,12 @@ export type ForgetFormType = z.infer<typeof ForgetFormSchema>
 
 function TokenInsert() {
   // const router = useRouter()
-  // const { showToast } = useContext(ToastContext)
-  const { insertToken } = useAuth()
+  const { showToast } = useContext(ToastContext)
+  const { insertToken, recovery } = useAuth()
+  const [counter, setCounter] = useState(20)
+  const [disabled, setDisabled] = useState(true)
 
   const {
-    register,
     handleSubmit,
     setValue,
     formState: { errors },
@@ -34,19 +37,37 @@ function TokenInsert() {
       insertToken(data.inputToken)
         .then(() => {
           console.warn('Token inserido com sucesso')
+          showToast({
+            type: 'success',
+            message: 'Token inserido com sucesso',
+          })
+          localStorage.setItem('token', data.inputToken)
+          router.navigate({ to: '/token-reset' })
         })
         .catch((error) => {
+          showToast({
+            type: 'error',
+            title: 'Algo deu errado',
+            message: error.message,
+          })
           console.warn('Algo deu errado')
           console.error(error)
         })
   }
 
   useEffect(() => {
-    console.warn(register)
-    console.warn(errors)
-    console.warn(setValue)
-    console.warn(typeof setValue)
-  }, [setValue])
+    if (counter <= 0) {
+      setDisabled(false) // Habilita o botão quando o contador chega a zero
+
+      return
+    }
+
+    const time = setInterval(() => {
+      setCounter((prev) => prev - 1)
+    }, 1000)
+
+    return () => clearInterval(time) // Limpa o intervalo corretamente
+  }, [counter]) // Só roda quando `counter` muda
 
   return (
     <div className="w-full md:w-[608px]  p-12">
@@ -97,13 +118,34 @@ function TokenInsert() {
             </span>
             <span className="flex flex-col justify-center gap-4">
               <Button
+                type="submit"
                 label="Confirmar código"
                 style={{ backgroundColor: '#212529' }}
               />
               <Button
+                type="button"
+                onClick={() => {
+                  const email = localStorage.getItem('email')
+
+                  if (email) {
+                    recovery && recovery(email)
+                    showToast({
+                      type: 'success',
+                      title: 'E-mail enviado com sucesso',
+                      message: 'Verifique seu E-mail, Pode estar em SPAM',
+                    })
+                    setCounter(20) // Reseta o contador
+                    setDisabled(true) // Desativa o botão novamente
+                  }
+                }}
+                disabled={disabled}
                 variant="outline"
-                label={`(${0}) Reenviar código`}
-                style={{ border: '1px solid black', color: 'black' }}
+                label={`(${counter}) Reenviar código`}
+                style={{
+                  border: '1px solid black',
+                  color: disabled ? 'darkgrey' : 'black',
+                  backgroundColor: disabled ? 'lightgrey' : 'white',
+                }}
               />
             </span>
             <div className="flex flex-col gap-4 text-center">

@@ -44,6 +44,13 @@ export default {
     await api.post('/User/validTokenPassword', { token })
   },
 
+  async changePassword(token: string, password: string): Promise<void> {
+    await api.patch('/User/changePassword', {
+      token: token,
+      newPassword: password,
+    })
+  },
+
   async getUser(): Promise<AuthUser> {
     return {
       name: 'Admin',
