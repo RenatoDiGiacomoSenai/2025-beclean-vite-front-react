@@ -1,52 +1,54 @@
-import { ForgetFormType } from '@shared/authentication/components/ForgetForm';
-import { useRef, ClipboardEvent } from 'react';
-
-
+import { ForgetFormType } from '@shared/authentication/components/ForgetForm'
+import { useState, useRef, ClipboardEvent } from 'react'
 
 type CharInputProps = {
-  setValue: (field: keyof ForgetFormType, value: string) => void;
-  fieldName: keyof ForgetFormType;
-};
+  setValue: (field: keyof ForgetFormType, value: string) => void
+  fieldName: keyof ForgetFormType
+}
 
 function CharInput({ setValue, fieldName }: CharInputProps) {
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const verificationCode = ['', '', '', '']; // Estado inicial fixo
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([])
+  const [verificationCode, setVerificationCode] = useState(['', '', '', '']) // Use state to persist values
 
   const handlePaste = (event: ClipboardEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    const pastedText = event.clipboardData.getData('text').slice(0, 4);
-    const newCode = pastedText.split('').concat(Array(4).fill('')).slice(0, 4);
+    event.preventDefault()
+    const pastedText = event.clipboardData.getData('text').slice(0, 4)
+    const newCode = pastedText.split('').concat(Array(4).fill('')).slice(0, 4)
 
-    setValue(fieldName, newCode.join('')); // Atualiza o useForm
+    setVerificationCode(newCode) // Update state
+    setValue(fieldName, newCode.join('')) // Update useForm
 
     newCode.forEach((char, index) => {
       if (inputRefs.current[index]) {
-        inputRefs.current[index]!.value = char;
+        inputRefs.current[index]!.value = char
 
         if (char && inputRefs.current[index + 1]) {
-          inputRefs.current[index + 1]!.focus();
+          inputRefs.current[index + 1]!.focus()
         }
       }
-    });
-  };
+    })
+  }
 
   const handleChange = (index: number, value: string) => {
-    verificationCode[index] = value.slice(-1);
-    setValue(fieldName, verificationCode.join('')); // Atualiza o useForm
+    const updatedCode = [...verificationCode]
+    updatedCode[index] = value.slice(-1)
+    setVerificationCode(updatedCode) // Update state
+    setValue(fieldName, updatedCode.join('')) // Update useForm
 
     if (value && inputRefs.current[index + 1]) {
-      inputRefs.current[index + 1]!.focus();
+      inputRefs.current[index + 1]!.focus()
     }
-  };
+  }
 
   return (
     <div style={{ display: 'flex', gap: '10px' }}>
-      {verificationCode.map((_, index) => (
+      {verificationCode.map((char, index) => (
         <input
           key={index}
           type="text"
           maxLength={1}
           ref={(el) => (inputRefs.current[index] = el)}
+          value={char} // Bind input value to state
           onChange={(e) => handleChange(index, e.target.value)}
           onPaste={handlePaste}
           style={{
@@ -60,7 +62,7 @@ function CharInput({ setValue, fieldName }: CharInputProps) {
         />
       ))}
     </div>
-  );
+  )
 }
 
-export default CharInput;
+export default CharInput
