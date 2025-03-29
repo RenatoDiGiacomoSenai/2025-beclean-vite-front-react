@@ -24,7 +24,6 @@ function TokenInsert() {
   const [disabled, setDisabled] = useState(true)
 
   const {
-    
     handleSubmit,
     setValue,
     formState: { errors },
@@ -33,11 +32,9 @@ function TokenInsert() {
   })
 
   const onSubmit = (data: ForgetFormType) => {
-    console.warn(data.inputToken)
     insertToken &&
       insertToken(data.inputToken)
         .then(() => {
-          console.warn('Token inserido com sucesso')
           showToast({
             type: 'success',
             message: 'Token inserido com sucesso',
@@ -51,11 +48,10 @@ function TokenInsert() {
             title: 'Algo deu errado',
             message: error.message,
           })
-          console.warn('Algo deu errado')
+
           console.error(error)
         })
   }
-
 
   useEffect(() => {
     if (counter <= 0) {

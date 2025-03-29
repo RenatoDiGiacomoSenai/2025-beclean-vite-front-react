@@ -4,7 +4,7 @@ import { UsersListQuery, useUsers } from '@features/users/services'
 
 function UserFilters() {
   const [query, setQuery] = useState<UsersListQuery>()
-  const { refetch } = useUsers(query)
+  const { refetch } = useUsers()
 
   const handleSearch = (search: string) => {
     setQuery((prev) => ({ ...prev, search }))

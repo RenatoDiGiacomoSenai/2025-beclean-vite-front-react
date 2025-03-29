@@ -1,52 +1,67 @@
 import { api } from '@shared/authentication/services/apiAxios'
-import { ToastProps } from '@istic-ui/react'
-import { AxiosError } from 'axios'
 
-import { UserDataProps, UsersListQuery } from './user.types'
+import { UsersListQuery, UserTypes } from './user.types'
 
-//teste2@teste.com
 export default {
-  // ! Listar Usuário
+  // ! Listar Usuários
   async getUsers(query?: UsersListQuery) {
-    
     const res = await api.get('/User')
 
-    if (query) {
-      return {}
-    } else {
-      return res?.data.items
-    }
-  },
-  // ! Criar Usuário
-  async createUser(
-    data: UserDataProps,
-    showToast: (options: ToastProps) => void,
-    setModal: React.Dispatch<React.SetStateAction<boolean>>,
-  ) {
-    try {
-      await api.post('/User/me', data)
+    // Filtrar os usuários com base no parâmetro `query`
+    const filteredUsers = query
+      ? res.data.items.filter((user: UserTypes) =>
+          user.name
+            .toLocaleLowerCase()
+            .includes(query),
+        )
+      : res.data.items
 
-      showToast({
-        title: 'Usuário criado com sucesso',
-        type: 'success',
-        durationInMs: 10000,
-      })
-      setModal(false)
-      window.location.reload()
-    } catch (error) {
-      if ((error as AxiosError).response?.status === 400) {
-        showToast({
-          title: 'Usuário já cadastrado',
-          message:
-            'O e-mail informado está cadastrado ou já foi cadastrado no sistema',
-          type: 'error',
-          durationInMs: 10000,
-        })
-      }
+      console.warn('res', res.data.items)
+      console.warn('filteredUsers', filteredUsers)
 
-      throw new Error(`Something went wrong ${error}`)
-    }
+    return filteredUsers
   },
+  // ! Ver Usuário
+  async getUser(id?: UserTypes['id']) {
+    const res = await api.get(`/User/${id}`)
+    console.warn('res', res.data)
+
+    return res.data
+  },
+
+  // // ! Criar Usuário
+  // async createUser(data: any) {
+  //   const getData = await api.get('/User')
+
+  //   console.warn(getData.data.items)
+
+  //   const userExists = getData.data.items.some(
+  //     (user: UserTypes) => user.email === data.email,
+  //   )
+
+  //   try {
+  //     if (!userExists) {
+  //       showToast({
+  //         title: 'Usuário Criado',
+  //         message: 'O usuário foi criado com sucesso',
+  //         type: 'success',
+  //       })
+
+  //       await api.post('/User/me', data)
+  //     } else {
+  //       alert('Usuário com o mesmo nome ou e-mail já existe')
+  //       showToast({
+  //         title: 'Usuário Já existe',
+  //         message: 'Usuário com o mesmo nome ou e-mail já existe',
+  //         type: 'error',
+  //       })
+  //       throw new Error('User with the same name or email already exists')
+  //     }
+  //   } catch (error) {
+  //     console.error(error)
+  //     throw new Error(`Something went wrong ${error}`)
+  //   }
+  // },
 
   // ! Atualizar Usuário
   async updateUser(id: string, data: any) {
@@ -59,15 +74,14 @@ export default {
     }
   },
 
-  // ! Deletar Usuário
-  async DeleteUser(id: string) {
-    try {
-      const res = await api.delete(`/User/${id}`)
-      window.location.reload()
+  // // ! Deletar Usuário
+  // async deleteUser(id: string) {
+  //   try {
+  //     const res = await api.delete(`/User/${id}`)
 
-      return res.data
-    } catch (error) {
-      throw new Error(`Something went wrong ${error}`)
-    }
-  },
+  //     return res.data
+  //   } catch (error) {
+  //     throw new Error(`Something went wrong ${error}`)
+  //   }
+  // },
 }

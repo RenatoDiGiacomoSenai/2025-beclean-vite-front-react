@@ -14,7 +14,7 @@ function EditModalComponent(props: EditModalComponentProps) {
   return (
     <Modal
       isOpen={modal}
-      title="Deseja Excluir esse Usuário?"
+      title="Deseja Editar esse Usuário?"
       onClose={() => setModal(!modal)}
       className="flex flex-col border-t-2 border-neutral-500"
     >

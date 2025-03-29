@@ -1,32 +1,24 @@
-import { useEffect, useState } from 'react'
 import { Button, Select, TextInput } from '@istic-ui/react'
-import { UserRoles } from '@features/users/services'
+import { UserRoles, useUserById } from '@features/users/services'
 
 import EditModalComponent from './EditModal'
 
 export interface EditUserModalProps {
   modal: boolean
   setModal: React.Dispatch<React.SetStateAction<boolean>>
-  dataUser: any
+  data: any
 }
 
 function EditUserModal(props: EditUserModalProps) {
-  const { modal, setModal, dataUser } = props
-  const [userData, setUserData] = useState<{ name: string; email: string; role: UserRoles }>(dataUser)
+  const { modal, setModal, data } = props
+  const { user } = useUserById(data?.id)
 
-  const UpdateUser = () => {
-    // console.log(dataUser)
-  }
-
-  useEffect(() => {
-    // console.log(userData)
-  }, [userData])
 
   return (
     <EditModalComponent modal={modal} setModal={setModal}>
       <form
         className="flex flex-col gap-4 border-t-[2px] border-neutral-300 pt-4 w-[432px] h-full"
-        onSubmit={UpdateUser}
+        // onSubmit={UpdateUser}
       >
         <TextInput
           error={{
@@ -34,10 +26,10 @@ function EditUserModal(props: EditUserModalProps) {
           }}
           grow
           label="Nome do Usuário"
-          placeholder={dataUser?.name}
+          placeholder={user?.name}
           required
           size="lg"
-          onChange={(item) => {setUserData((prev) => ({ ...prev, name: item.target.value }))}}
+          // onChange={(item) => {setUserData((prev) => ({ ...prev, name: item.target.value }))}}
         />
 
         <Select
@@ -45,9 +37,9 @@ function EditUserModal(props: EditUserModalProps) {
             description: '',
           }}
           grow
+          defaultValue={user?.type}
           label="Permissão"
-          
-          onSelect={(item) => {setUserData((prev) => ({ ...prev, type: item?.value }))}}
+          onSelect={() => () => {}}
           options={[
             {
               label: 'Selecione a Permissão',
@@ -79,7 +71,7 @@ function EditUserModal(props: EditUserModalProps) {
           required
           size="lg"
           disabled
-          value={dataUser?.email}
+          value={user?.email}
         />
         <span className="w-full h-[2px] bg-neutral-300"></span>
         <div className="flex justify-end gap-4">

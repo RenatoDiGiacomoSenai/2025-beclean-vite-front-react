@@ -1,42 +1,30 @@
 'use client'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { createRoute } from '@tanstack/react-router'
 import { PrivateRoutes } from '@shared/layouts/PrivateLayout'
 import AddUserBtn from '@features/users/components/AddUserBtn'
 import UserFilters from '@features/users/components/Filter'
 import UserList from '@features/users/components/List'
-import CreationUserModal from '@features/users/components/UserModal'
-import { UserDataProps, UserRoles, useUsers } from '@features/users/services'
-import userService from '@features/users/services/user.service'
-import { useToast } from '@shared/context'
+
+
 
 function ListUsersPage() {
-  const { users, loading } = useUsers()
-  const { showToast } = useToast()
+
 
   const [modal, setModal] = React.useState<boolean>(false)
-  const [data, setData] = React.useState<UserDataProps>({
-    name: '',
-    email: '',
-    password: 'Admin@123',
-    type: 'string' as UserRoles,
-  })
 
-  useEffect(() => {
-    setData((prev: UserDataProps) => ({ ...prev, type: prev.type }))
-  }, [])
 
-  const handleCreateUser = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  // const handleCreateUser = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault()
 
-    try {
-      userService.createUser(data, showToast, setModal)
-    } catch (error) {
-      throw new Error(
-        typeof error === 'string' ? error : 'An unknown error occurred',
-      )
-    }
-  }
+  //   try {
+  //     userService.createUser(data, showToast, setModal)
+  //   } catch (error) {
+  //     throw new Error(
+  //       typeof error === 'string' ? error : 'An unknown error occurred',
+  //     )
+  //   }
+  // }
 
   return (
     <div className="flex flex-col gap-4 h-full">
@@ -50,32 +38,24 @@ function ListUsersPage() {
           </div>
         </div>
         <div className="flex justify-between gap-2 items-center align-middle">
-          {/*
-          Componente de filtro de usuários
-          */}
+          {/*  Componente de filtro de usuários */}
           <UserFilters />
-          {/*
-          Botão de adicionar usuário
-          */}
 
+          {/*  Componente De abertura do modal de criação de usuário */}
           <AddUserBtn setModal={setModal} modal={modal} />
         </div>
       </div>
 
-      {/*
-        Componente de listagem de usuários
-        */}
-      <UserList loading={loading} users={users} />
+      {/* Componente de listagem de usuários */}
+      <UserList />
 
-      {/*
-        Modal de criação de usuário
-      */}
-      <CreationUserModal
-        createUser={setData}
+      {/* Modal de criação de usuário */}
+      {/* <CreationUserModal
+        createUser={setData as React.Dispatch<React.SetStateAction<UserTypes>>}
         sendForm={(e) => handleCreateUser(e!)}
         modal={modal}
         setModal={setModal}
-      />
+      /> */}
     </div>
   )
 }

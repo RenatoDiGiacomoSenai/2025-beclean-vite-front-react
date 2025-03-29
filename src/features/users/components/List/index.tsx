@@ -1,42 +1,35 @@
-import { useState } from 'react'
+import { SetStateAction, useState } from 'react'
 import { ActionIcon, DropdownMenu, Table } from '@istic-ui/react'
-import { UserTypes } from '@features/users/services'
+import { UserTypes, useUsers } from '@features/users/services'
 
-import ConfirmationModal from '../ConfirmationModal'
+
 import EditUserModal from '../EditUserModal'
 
-
-interface UserListProps {
-  users: UserTypes[]
-  loading: boolean
-}
-
-
-
-function UserList(props: UserListProps) {
-  const { users, loading } = props
-
-  const [dataUser, setDataUser] = useState<UserTypes | null>(null)
+function UserList() {
   const [editUserModal, setEditUserModal] = useState(false)
+  const [userId, setUserId] = useState<SetStateAction<UserTypes>>()
 
-  const [dataUserDelete, setDataUserDelete] = useState<UserTypes | null>(
-    null,
-  )
-  const [modalConfirmationModal, setModalConfirmationModal] = useState(false)
+  const { users, loadingUsers } = useUsers()
 
-  const handleItemModal = (item: UserTypes | null) => {
-    setModalConfirmationModal(true)
-    setDataUserDelete(item)
-  }
 
-  const handleUserData = (item: UserTypes | null) => {
+  // const [dataUserDelete, setDataUserDelete] = useState<UserTypes | null>(null)
+
+
+  // const handleItemModal = (item: UserTypes | null) => {
+  //   setModalConfirmationModal(true)
+  //   setDataUserDelete(item)
+  // }
+
+  const handleUserData = (item: UserTypes)=> {
+    console.warn(item.id)
+    console.warn(item)
+    setUserId(item)
     setEditUserModal(true)
-    setDataUser(item)
   }
 
   return (
     <>
-      <Table
+      <Table<UserTypes>
         classNames={{
           bodyCell: 'bg-white',
           bodyRow: 'bg-white hover:bg-brand-50',
@@ -81,7 +74,7 @@ function UserList(props: UserListProps) {
                       iconName: 'trash',
                       label: 'Excluir Usuário',
                       id: 'deleteOption',
-                      onClick: () => handleItemModal(item),
+                      onClick: () => console.warn('IteDelete', item),
                     },
                   ]}
                   mainItem={
@@ -97,18 +90,19 @@ function UserList(props: UserListProps) {
           },
         ]}
         data={users || []}
-        isLoading={loading}
+        isLoading={loadingUsers}
       />
       <EditUserModal
         modal={editUserModal}
         setModal={setEditUserModal}
-        dataUser={dataUser}
+        data={userId}
       />
-      <ConfirmationModal
+      {/* <ConfirmationModal
         modal={modalConfirmationModal}
         setModal={setModalConfirmationModal}
         dataUser={dataUserDelete}
-      />
+      /> */}
+     
     </>
   )
 }
