@@ -60,10 +60,6 @@ export function AuthProvider({ children }: { readonly children: ReactNode }) {
     token: string,
     password: string,
   ): Promise<void> => {
-    console.warn(token)
-    console.warn(password)
-    console.warn(typeof password)
-
     return authService.changePassword(token, password)
   }
 
@@ -78,7 +74,7 @@ export function AuthProvider({ children }: { readonly children: ReactNode }) {
       signOut,
       recovery,
       insertToken,
-      changePassword
+      changePassword,
     }),
     [authenticated, error, loading, user],
   )
