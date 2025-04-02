@@ -1,6 +1,16 @@
 import { ApiListQuery, ApiListResponse } from '@shared/types'
 
-export interface UserTypes {
+export interface UsersData {
+  users: UserTypes
+  pagination: {
+    page: number
+    pageSize: number
+    total: number
+    pageCount: number
+  }
+}
+
+export type UserTypes = {
   id: string
   name: string
   email: string
@@ -28,5 +38,4 @@ export type UserItem = Pick<UserTypes, 'id' | 'name' | 'email'>
 
 export type UserListResponse = ApiListResponse<UserItem>
 
-export type UsersListQuery = Partial<Pick<UserTypes,  'name'>> &
-  ApiListQuery
+export type UsersListQuery = Partial<Pick<UserTypes, 'name'>> & ApiListQuery

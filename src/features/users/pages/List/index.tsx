@@ -5,26 +5,15 @@ import { PrivateRoutes } from '@shared/layouts/PrivateLayout'
 import AddUserBtn from '@features/users/components/AddUserBtn'
 import UserFilters from '@features/users/components/Filter'
 import UserList from '@features/users/components/List'
-
-
+import { UsersListQuery, useUsers } from '@features/users/services'
+import CreationUserModal from '@features/users/components/UserModal'
 
 function ListUsersPage() {
-
-
+  const [pageCount, setPageCount] = React.useState(1)
+  const [query, setQuery] = React.useState<UsersListQuery>({})
   const [modal, setModal] = React.useState<boolean>(false)
 
-
-  // const handleCreateUser = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault()
-
-  //   try {
-  //     userService.createUser(data, showToast, setModal)
-  //   } catch (error) {
-  //     throw new Error(
-  //       typeof error === 'string' ? error : 'An unknown error occurred',
-  //     )
-  //   }
-  // }
+  const { users, loadingUsers, page, pagination } = useUsers(query, pageCount)
 
   return (
     <div className="flex flex-col gap-4 h-full">
@@ -39,7 +28,7 @@ function ListUsersPage() {
         </div>
         <div className="flex justify-between gap-2 items-center align-middle">
           {/*  Componente de filtro de usuários */}
-          <UserFilters />
+          <UserFilters setQuery={setQuery} />
 
           {/*  Componente De abertura do modal de criação de usuário */}
           <AddUserBtn setModal={setModal} modal={modal} />
@@ -47,15 +36,17 @@ function ListUsersPage() {
       </div>
 
       {/* Componente de listagem de usuários */}
-      <UserList />
+      <UserList
+        users={users || []}
+        loadingUsers={loadingUsers}
+        pagination={pagination}
+        page={page}
+        pageCount={pageCount}
+        setPageCount={setPageCount}
+      />
 
       {/* Modal de criação de usuário */}
-      {/* <CreationUserModal
-        createUser={setData as React.Dispatch<React.SetStateAction<UserTypes>>}
-        sendForm={(e) => handleCreateUser(e!)}
-        modal={modal}
-        setModal={setModal}
-      /> */}
+      <CreationUserModal modal={modal} setModal={setModal} />
     </div>
   )
 }

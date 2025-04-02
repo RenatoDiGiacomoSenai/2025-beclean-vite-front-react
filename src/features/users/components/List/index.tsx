@@ -1,30 +1,43 @@
-import { SetStateAction, useState } from 'react'
+import { useState } from 'react'
 import { ActionIcon, DropdownMenu, Table } from '@istic-ui/react'
-import { UserTypes, useUsers } from '@features/users/services'
+import { UsersData, UserTypes } from '@features/users/services'
 
-
+import ConfirmationModal from '../ConfirmationModal'
 import EditUserModal from '../EditUserModal'
 
-function UserList() {
-  const [editUserModal, setEditUserModal] = useState(false)
-  const [userId, setUserId] = useState<SetStateAction<UserTypes>>()
+import UserPagination from './Pagination'
 
-  const { users, loadingUsers } = useUsers()
+// import UserPagination from './Pagination'
 
+function UserList({
+  users,
+  loadingUsers,
+  page,
+  pagination,
+  pageCount,
+  setPageCount,
+}: {
+  users: UsersData['users'] | []
+  loadingUsers: boolean
+  page: number | undefined
+  pagination: UsersData['pagination'] | undefined
+  pageCount: number
+  setPageCount: React.Dispatch<React.SetStateAction<number>>
+}) {
+  const [modal, setModal] = useState(false)
+  const [userEditModal, setUserEditModal] = useState(false)
 
-  // const [dataUserDelete, setDataUserDelete] = useState<UserTypes | null>(null)
+  const [dataUserEdit, setDataUserEdit] = useState<UserTypes>()
+  const [dataUserDelete, setDataUserDelete] = useState<UserTypes>()
 
+  const handleUserDeleteData = (item: UserTypes) => {
+    setModal(!modal)
+    setDataUserDelete(item)
+  }
 
-  // const handleItemModal = (item: UserTypes | null) => {
-  //   setModalConfirmationModal(true)
-  //   setDataUserDelete(item)
-  // }
-
-  const handleUserData = (item: UserTypes)=> {
-    console.warn(item.id)
-    console.warn(item)
-    setUserId(item)
-    setEditUserModal(true)
+  const handleUserEditData = (item: UserTypes) => {
+    setUserEditModal(!userEditModal)
+    setDataUserEdit(item)
   }
 
   return (
@@ -62,7 +75,7 @@ function UserList() {
                       iconName: 'edit-box',
                       label: 'Editar Usuário',
                       id: 'edit',
-                      onClick: () => handleUserData(item),
+                      onClick: () => handleUserEditData(item),
                     },
                     {
                       iconName: 'lock',
@@ -74,7 +87,7 @@ function UserList() {
                       iconName: 'trash',
                       label: 'Excluir Usuário',
                       id: 'deleteOption',
-                      onClick: () => console.warn('IteDelete', item),
+                      onClick: () => handleUserDeleteData(item),
                     },
                   ]}
                   mainItem={
@@ -89,20 +102,27 @@ function UserList() {
             ),
           },
         ]}
-        data={users || []}
+        data={Array.isArray(users) ? users : []}
         isLoading={loadingUsers}
       />
       <EditUserModal
-        modal={editUserModal}
-        setModal={setEditUserModal}
-        data={userId}
+        modal={userEditModal}
+        setModal={setUserEditModal}
+        users={dataUserEdit}
       />
-      {/* <ConfirmationModal
-        modal={modalConfirmationModal}
-        setModal={setModalConfirmationModal}
-        dataUser={dataUserDelete}
-      /> */}
-     
+
+      {/* Modal de confirmação de exclusão */}
+      <ConfirmationModal
+        modal={modal}
+        setModal={setModal}
+        userId={dataUserDelete?.id}
+      />
+      <UserPagination
+        page={page}
+        pagination={pagination}
+        setPageCount={setPageCount}
+        pageCount={pageCount}
+      />
     </>
   )
 }

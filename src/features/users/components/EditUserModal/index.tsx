@@ -1,18 +1,16 @@
-import { Button, Select, TextInput } from '@istic-ui/react'
-import { UserRoles, useUserById } from '@features/users/services'
+import { Button, TextInput } from '@istic-ui/react'
+import { UserTypes } from '@features/users/services'
 
 import EditModalComponent from './EditModal'
 
 export interface EditUserModalProps {
   modal: boolean
   setModal: React.Dispatch<React.SetStateAction<boolean>>
-  data: any
+  users: UserTypes | undefined
 }
 
 function EditUserModal(props: EditUserModalProps) {
-  const { modal, setModal, data } = props
-  const { user } = useUserById(data?.id)
-
+  const { modal, setModal, users } = props
 
   return (
     <EditModalComponent modal={modal} setModal={setModal}>
@@ -26,39 +24,12 @@ function EditUserModal(props: EditUserModalProps) {
           }}
           grow
           label="Nome do Usuário"
-          placeholder={user?.name}
+          placeholder={users?.name}
           required
           size="lg"
-          // onChange={(item) => {setUserData((prev) => ({ ...prev, name: item.target.value }))}}
-        />
-
-        <Select
-          error={{
-            description: '',
+          onChange={(item) => {
+            console.warn(item.target.value)
           }}
-          grow
-          defaultValue={user?.type}
-          label="Permissão"
-          onSelect={() => () => {}}
-          options={[
-            {
-              label: 'Selecione a Permissão',
-              value: 'null',
-              disabled: true,
-            },
-            {
-              label: 'Administrador',
-              value: UserRoles.ADMIN,
-            },
-            {
-              label: 'Consumidor',
-              value: UserRoles.CONSUMER,
-            },
-          ]}
-          pickerHeight="30dvh"
-          placeholder="Selecione a permissão do usuário"
-          required
-          size="lg"
         />
 
         <TextInput
@@ -71,7 +42,7 @@ function EditUserModal(props: EditUserModalProps) {
           required
           size="lg"
           disabled
-          value={user?.email}
+          value={users?.email}
         />
         <span className="w-full h-[2px] bg-neutral-300"></span>
         <div className="flex justify-end gap-4">

@@ -1,15 +1,16 @@
-import { useState } from 'react'
+
 import { SearchInput } from '@istic-ui/react'
-import { UsersListQuery, useUsers } from '@features/users/services'
+import { UsersListQuery } from '@features/users/services'
 
-function UserFilters() {
-  const [query, setQuery] = useState<UsersListQuery>()
-  const { refetch } = useUsers()
-
-  const handleSearch = (search: string) => {
-    setQuery((prev) => ({ ...prev, search }))
-    refetch()
-  }
+function UserFilters({
+  setQuery,
+}: {
+  setQuery: React.Dispatch<React.SetStateAction<UsersListQuery>>
+}) {
+  // const handleSearch = (name: string) => {
+  //   setQuery((prev) => ({ ...prev, name }))
+  //   refetch()
+  // }
 
   return (
     <div className="flex flex-col-reverse md:flex-row justify-end gap-4 py-4">
@@ -19,7 +20,12 @@ function UserFilters() {
           name: 'search',
           position: 'right',
         }}
-        onChange={(e) => handleSearch(e.target.value)}
+        onChange={(e) => {
+          const value = e.target.value;
+          setTimeout(() => {
+            setQuery((prev) => ({ ...prev, name: value }));
+          }, 600); // Delay to simulate "stop typing" behavior
+        }}
       />
     </div>
   )

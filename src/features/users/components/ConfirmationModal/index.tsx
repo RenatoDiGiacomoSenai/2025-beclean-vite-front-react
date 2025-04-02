@@ -1,22 +1,46 @@
+import { useDeleteUser } from '@features/users/services'
 import { Button } from '@istic-ui/react'
-import userService from '@features/users/services/user.service'
-
-import { UserInfoProps } from '../List'
+import { useToast } from '@shared/context'
+import { useEffect } from 'react'
 
 import DelConfirModalComponent from './DelConfirModal'
 
-type ConfirmationModalProps = {
+export interface UserInfoProps {
   modal: boolean
-  setModal: React.Dispatch<React.SetStateAction<boolean>>
-  dataUser: UserInfoProps| null
+  setModal: (modal: boolean) => void
+  userId: string | undefined
 }
 
-function ConfirmationModal(props: ConfirmationModalProps) {
-  const { modal, setModal, dataUser } = props
+function ConfirmationModal({ modal, setModal, userId }: UserInfoProps) {
+  const { showToast } = useToast()
+  const { deleteUser, isSuccess, isError } = useDeleteUser()
 
   const handleDeleteUser = () => {
-    userService.DeleteUser(dataUser?.id as string)
+    if (!userId) return
+    deleteUser(userId)
   }
+
+  useEffect(() => {
+    if (isSuccess) {
+      showToast({
+        type: 'success',
+        title: 'Usuário removido com sucesso.',
+        durationInMs: 5000,
+      })
+      setModal(false)
+    }
+  }, [isSuccess])
+
+  useEffect(() => {
+    if (isError) {
+      showToast({
+        type: 'error',
+        title: 'Erro ao remover usuário.',
+        durationInMs: 5000,
+      })
+      setModal(false)
+    }
+  }, [isError])
 
   return (
     <DelConfirModalComponent modal={modal} setModal={setModal}>

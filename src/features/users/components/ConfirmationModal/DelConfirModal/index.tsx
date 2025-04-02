@@ -3,12 +3,11 @@ import React from 'react'
 
 type DelConfirModalComponentProps = {
   modal: boolean
-  setModal: React.Dispatch<React.SetStateAction<boolean>>
+  setModal: (modal: boolean) => void
   children: React.ReactNode
 }
 
 function DelConfirModalComponent(props: DelConfirModalComponentProps) {
-
   const { modal, setModal, children } = props
 
   return (
@@ -22,6 +21,5 @@ function DelConfirModalComponent(props: DelConfirModalComponentProps) {
     </Modal>
   )
 }
-
 
 export default DelConfirModalComponent
