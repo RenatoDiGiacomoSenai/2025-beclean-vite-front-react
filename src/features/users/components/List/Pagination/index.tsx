@@ -11,52 +11,72 @@ interface UserPaginationProps {
 function UserPagination({
   pagination,
   page,
-  pageCount,
   setPageCount,
 }: UserPaginationProps) {
   const [totalPages, setTotalPages] = useState<number[]>([])
 
-  {
-    /*
-    !!Info sobre as variáveis!!
-    'pagination' é o retorno da API, que contém informações sobre a paginação.
-    'page' é o número da página atual.
-    'pageCount' é o número total de páginas.
-   */
-  }
-
   useEffect(() => {
-    const TotalPagesArray = []
-
     if (pagination?.pageCount) {
-      for (let i = 1; i <= pagination?.pageCount; i++) {
-        TotalPagesArray.push(i)
-        setTotalPages(TotalPagesArray)
-        console.warn(totalPages)
-      }
+      const TotalPagesArray = Array.from({ length: pagination.pageCount }, (_, i) => i + 1)
+      setTotalPages(TotalPagesArray)
     }
-    
+  }, [pagination?.pageCount])
 
-  }, [pageCount])
+  // Lógica para exibir paginação encurtada
+  const maxVisiblePages = 5
+  const lastPage = pagination?.pageCount || 1
+  let displayedPages: (number | string)[] = []
 
-  console.warn(totalPages)
+  if (lastPage <= maxVisiblePages) {
+    displayedPages = totalPages
+  } else {
+    if (page && page <= 3) {
+      displayedPages = [1, 2, 3, 4, 5, '...', lastPage]
+    } else if (page && page >= lastPage - 2) {
+      displayedPages = [1, '...', lastPage - 4, lastPage - 3, lastPage - 2, lastPage - 1, lastPage]
+    } else {
+      displayedPages = [1, '...', page! - 1, page!, page! + 1, '...', lastPage]
+    }
+  }
 
   return (
     <div className="flex justify-center align-middle gap-2 items-center">
+      {/* Botão de página anterior */}
+      <button
+        onClick={() => setPageCount((prev) => Math.max(1, prev - 1))}
+        disabled={page === 1}
+        className="py-1 px-3 rounded-md border-2 border-zinc-600 text-zinc-500"
+      >
+        &lt;
+      </button>
 
+      {displayedPages.map((pageIndex, index) =>
+        pageIndex === '...' ? (
+          <span key={index} className="py-1 px-3 text-zinc-500">
+            ...
+          </span>
+        ) : (
+          <button
+            key={index}
+            onClick={() => setPageCount(pageIndex as number)}
+            disabled={page === pageIndex}
+            className={`py-1 px-3 rounded-md border-2 ${
+              page === pageIndex ? 'bg-zinc-600 text-white' : 'border-zinc-600 text-zinc-500'
+            }`}
+          >
+            {pageIndex}
+          </button>
+        )
+      )}
 
-      {totalPages.map((pageIndex, index) => (
-        <button
-          key={index}
-          onClick={() => setPageCount(pageIndex)}
-          disabled={page === pageIndex}
-          className={` py-1 px-3 rounded-md border-zinc-600 border-2 ${
-            page === pageIndex ? 'bg-zinc-600 text-white' : 'text-zinc-500'
-          }`}
-        >
-          {pageIndex}
-        </button>
-      ))}
+      {/* Botão de próxima página */}
+      <button
+        onClick={() => setPageCount((prev) => Math.min(lastPage, prev + 1))}
+        disabled={page === lastPage}
+        className="py-1 px-3 rounded-md border-2 border-zinc-600 text-zinc-500"
+      >
+        &gt;
+      </button>
     </div>
   )
 }

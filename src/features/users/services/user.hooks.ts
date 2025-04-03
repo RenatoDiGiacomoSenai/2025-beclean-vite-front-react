@@ -2,7 +2,7 @@ import { useQuery, useQueryClient, UseQueryResult } from '@tanstack/react-query'
 import { useMutation } from '@tanstack/react-query'
 
 import userService from './user.service'
-import { UsersData, UsersListQuery } from './user.types'
+import { UserItem, UsersData, UsersListQuery } from './user.types'
 
 export function useUsers(query: UsersListQuery, page?: number) {
   const {
@@ -14,7 +14,6 @@ export function useUsers(query: UsersListQuery, page?: number) {
   }: UseQueryResult<UsersData, Error> = useQuery({
     queryKey: ['users', query, page],
     queryFn: async () => userService.getUsers(query, page),
-
   })
 
   return {
@@ -26,15 +25,6 @@ export function useUsers(query: UsersListQuery, page?: number) {
     isSuccess,
     isError,
   }
-}
-
-export function useUsersPagination() {
-  const { refetch, data: paginationData } = useQuery({
-    queryKey: ['paginationData'],
-    queryFn: async () => userService.getUsersPagination(),
-  })
-
-  return { refetch, paginationData }
 }
 
 // export function useUserById(queryId?: string) {
@@ -63,7 +53,6 @@ export function useCreateUser() {
     mutationFn: userService.createUser,
     onSuccess: () => {
       client.invalidateQueries({ queryKey: ['users'] })
-      console.warn('success')
     },
     onError: (error) => {
       console.error(error)
@@ -91,4 +80,26 @@ export function useDeleteUser() {
   })
 
   return { deleteUser, isSuccess, isError }
+}
+
+export function useUpdateUser() {
+  const client = useQueryClient()
+
+  const {
+    isPending: loading,
+
+    mutateAsync: updateUser,
+    isSuccess,
+    isError,
+  } = useMutation({
+    mutationFn: ({ data }: { data: UserItem }) => userService.updateUser(data),
+    onSuccess: () => {
+      client.invalidateQueries({ queryKey: ['user'] })
+    },
+    onError: (error) => {
+      console.error(error)
+    },
+  })
+
+  return { updateUser, isSuccess, isError, loading }
 }

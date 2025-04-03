@@ -22,7 +22,7 @@ function CreationUserModal(props: CreationUserModalProps) {
     name: '',
     email: '',
     type: UserRoles.ADMIN,
-    password: 'Admin@134',
+    role: UserRoles.OPERATOR,
   })
 
   const handleCreateUser = (e: React.FormEvent<HTMLFormElement>) => {
@@ -96,7 +96,7 @@ function CreationUserModal(props: CreationUserModalProps) {
                 onClick={() => setModal(false)}
                 size="sm"
                 variant="outline"
-                type='button'
+                type="button"
               />
               <Button
                 label="Criar Usuário"

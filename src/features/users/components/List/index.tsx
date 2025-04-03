@@ -66,8 +66,9 @@ function UserList({
             label: '',
             align: 'right',
             render: (item: UserTypes) => (
-              <div className="flex justify-end">
+              <div className="flex justify-end z-10">
                 <DropdownMenu
+                  
                   position="left"
                   align={'bottom'}
                   items={[

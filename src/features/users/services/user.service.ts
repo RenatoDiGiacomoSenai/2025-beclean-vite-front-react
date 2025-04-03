@@ -1,6 +1,6 @@
 import { api } from '@shared/authentication/services/apiAxios'
 
-import { UserDataProps, UsersListQuery, UserTypes } from './user.types'
+import { UserDataProps, UserItem, UsersListQuery, UserTypes } from './user.types'
 
 export default {
   // ! Listar Usuários
@@ -43,14 +43,8 @@ export default {
   },
 
   // ! Atualizar Usuário
-  async updateUser(id: string, data: any) {
-    try {
-      const res = await api.put(`/User/${id}`, data)
-
-      return res.data
-    } catch (error) {
-      throw new Error(`Something went wrong ${error}`)
-    }
+  async updateUser(data: UserItem) {
+    return await api.put(`/User/${data.id}`, {name: data.name, password: data.password})
   },
 
   // ! Deletar Usuário

@@ -25,13 +25,14 @@ export type UserTypes = {
 export interface UserDataProps {
   name: string
   email: string
-  password?: string
-  type: UserRoles
+  type: UserRoles.ADMIN
+  role: UserRoles.OPERATOR
 }
 
 export enum UserRoles {
   ADMIN = 'ADMIN',
   CONSUMER = 'CONSUMER',
+  OPERATOR = 'OPERATOR',
 }
 
 export type UserItem = Pick<UserTypes, 'id' | 'name' | 'email'>
