@@ -1,12 +1,75 @@
+import { useContext, useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useAuth } from '@shared/authentication/context'
 import logo from '@assets/login-logo.svg'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@istic-ui/react'
 import CharInput from '@shared/components/TokenInput'
 import { Link } from '@tanstack/react-router'
+import { z } from 'zod'
+import { router } from '@settings/tanstack-router'
+import { ToastContext } from '@shared/context'
+
+const ForgetFormSchema = z.object({
+  inputToken: z.string().min(4, 'Campo Obrigatório'),
+})
+
+export type ForgetFormType = z.infer<typeof ForgetFormSchema>
 
 function TokenInsert() {
+  // const router = useRouter()
+  const { showToast } = useContext(ToastContext)
+  const { insertToken, recovery } = useAuth()
+  const [counter, setCounter] = useState(20)
+  const [disabled, setDisabled] = useState(true)
+
+  const {
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<ForgetFormType>({
+    resolver: zodResolver(ForgetFormSchema),
+  })
+
+  const onSubmit = (data: ForgetFormType) => {
+    insertToken &&
+      insertToken(data.inputToken)
+        .then(() => {
+          showToast({
+            type: 'success',
+            message: 'Token inserido com sucesso',
+          })
+          localStorage.setItem('token', data.inputToken)
+          router.navigate({ to: '/token-reset' })
+        })
+        .catch((error) => {
+          showToast({
+            type: 'error',
+            title: 'Algo deu errado',
+            message: error.message,
+          })
+
+          console.error(error)
+        })
+  }
+
+  useEffect(() => {
+    if (counter <= 0) {
+      setDisabled(false) // Habilita o botão quando o contador chega a zero
+
+      return
+    }
+
+    const time = setInterval(() => {
+      setCounter((prev) => prev - 1)
+    }, 1000)
+
+    return () => clearInterval(time) // Limpa o intervalo corretamente
+  }, [counter]) // Só roda quando `counter` muda
+
   return (
     <div className="w-full md:w-[608px]  p-12">
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-6">
           <span className="flex flex-col">
             <img src={logo} width={164} alt="" />
@@ -14,6 +77,7 @@ function TokenInsert() {
 
           <span className="flex flex-col gap-8">
             <h4 className=" text-title-h4">Recuperação de Senha</h4>
+            {/*Separar para component */}
             <div className="flex justify-between gap-4">
               <div className="flex items-center gap-2">
                 <div className="w-10 aspect-square rounded-full flex items-center justify-center border-2 border-gray-900">
@@ -31,6 +95,7 @@ function TokenInsert() {
                 <div>Crie sua Nova Senha</div>
               </div>
             </div>
+            {/*Separar para component */}
             <span>
               <h4 className="text-title-h4 text-b">Verifique seu e-mail</h4>
               <p className="text-md text-grey-700">
@@ -41,21 +106,44 @@ function TokenInsert() {
                 </span>
               </p>
             </span>
-            <span className="flex gap-3">
-              <CharInput />
-              <CharInput />
-              <CharInput />
-              <CharInput />
+            <span className="flex-col gap-3">
+              <CharInput setValue={setValue} fieldName="inputToken" />
+              {errors.inputToken && (
+                <span className="text-red-500">
+                  {'Insira ou Cole os 4 número acima'}
+                </span>
+              )}
             </span>
             <span className="flex flex-col justify-center gap-4">
               <Button
+                type="submit"
                 label="Confirmar código"
                 style={{ backgroundColor: '#212529' }}
               />
               <Button
+                type="button"
+                onClick={() => {
+                  const email = localStorage.getItem('email')
+
+                  if (email) {
+                    recovery && recovery(email)
+                    showToast({
+                      type: 'success',
+                      title: 'E-mail enviado com sucesso',
+                      message: 'Verifique seu E-mail, Pode estar em SPAM',
+                    })
+                    setCounter(20) // Reseta o contador
+                    setDisabled(true) // Desativa o botão novamente
+                  }
+                }}
+                disabled={disabled}
                 variant="outline"
-                label={`(${0}) Reenviar código`}
-                style={{ border: '1px solid black', color: 'black' }}
+                label={`(${counter}) Reenviar código`}
+                style={{
+                  border: '1px solid black',
+                  color: disabled ? 'darkgrey' : 'black',
+                  backgroundColor: disabled ? 'lightgrey' : 'white',
+                }}
               />
             </span>
             <div className="flex flex-col gap-4 text-center">

@@ -1,47 +1,68 @@
-import { TextInputProps } from '@istic-ui/react'
+import { ForgetFormType } from '@shared/authentication/components/ForgetForm'
+import { useState, useRef, ClipboardEvent } from 'react'
 
-// type CharInputProps = TextInputProps
-
-function CharInput ({value}:TextInputProps)  {
-  // const [verificationCode, setVerificationCode] = React.useState(['', '', '', '']);
-
-  // const handlePaste = (event: ClipboardEvent<HTMLInputElement>) => {
-  //   event.preventDefault();
- 
-  //   const pastedText = event.clipboardData.getData('text');
- 
-  //   const newVerificationCode = [...verificationCode];
-  //   for (
-  //     let i = 0;
-  //     i < Math.min(pastedText.length, verificationCode.length);
-  //     i++
-  //   ) {
-  //     newVerificationCode[i] = pastedText[i];
-  //   }
- 
-  //   setVerificationCode(newVerificationCode);
-  //   setValue('code', newVerificationCode.join(''));
-  // };
-
-
-
-  return <input
-    type="text"
-    maxLength={1}
-    value={value} 
-    className={`
-      w-20
-      aspect-square
-      text-center
-      border-2
-      rounded
-      focus:outline-none
-      text-5xl
-      text-neutral-900
-      focus:border-neutral-500 ${value ? "border-brand-500" : "border-neutral-300"}`}
-    />
-
+type CharInputProps = {
+  setValue: (field: keyof ForgetFormType, value: string) => void
+  fieldName: keyof ForgetFormType
 }
 
+function CharInput({ setValue, fieldName }: CharInputProps) {
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([])
+  const [verificationCode, setVerificationCode] = useState(['', '', '', '']) // Use state to persist values
+
+  const handlePaste = (event: ClipboardEvent<HTMLInputElement>) => {
+    event.preventDefault()
+    const pastedText = event.clipboardData.getData('text').slice(0, 4)
+    const newCode = pastedText.split('').concat(Array(4).fill('')).slice(0, 4)
+
+    setVerificationCode(newCode) // Update state
+    setValue(fieldName, newCode.join('')) // Update useForm
+
+    newCode.forEach((char, index) => {
+      if (inputRefs.current[index]) {
+        inputRefs.current[index]!.value = char
+
+        if (char && inputRefs.current[index + 1]) {
+          inputRefs.current[index + 1]!.focus()
+        }
+      }
+    })
+  }
+
+  const handleChange = (index: number, value: string) => {
+    const updatedCode = [...verificationCode]
+    updatedCode[index] = value.slice(-1)
+    setVerificationCode(updatedCode) // Update state
+    setValue(fieldName, updatedCode.join('')) // Update useForm
+
+    if (value && inputRefs.current[index + 1]) {
+      inputRefs.current[index + 1]!.focus()
+    }
+  }
+
+  return (
+    <div style={{ display: 'flex', gap: '10px' }}>
+      {verificationCode.map((char, index) => (
+        <input
+          key={index}
+          type="text"
+          maxLength={1}
+          ref={(el) => (inputRefs.current[index] = el)}
+          value={char} // Bind input value to state
+          onChange={(e) => handleChange(index, e.target.value)}
+          onPaste={handlePaste}
+          style={{
+            width: '50px',
+            height: '50px',
+            textAlign: 'center',
+            fontSize: '24px',
+            border: '2px solid #ccc',
+            borderRadius: '5px',
+          }}
+        />
+      ))}
+    </div>
+  )
+}
 
 export default CharInput

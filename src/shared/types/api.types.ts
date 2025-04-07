@@ -7,9 +7,18 @@ export interface ApiError<T> {
 }
 
 export interface ApiPagination {
-  totalPages: number
+  page: number
   pageSize: number
+  sorting: [
+    {
+      field: string
+      sortDirection: ApiSortDirection
+    },
+  ]
   total: number
+  pageCount: number
+  isFirstPage: boolean
+  isLastPage: boolean
 }
 
 export interface ApiListResponse<T> {

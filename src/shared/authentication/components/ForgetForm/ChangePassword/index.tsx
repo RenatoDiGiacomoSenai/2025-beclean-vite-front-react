@@ -1,13 +1,74 @@
-import React from 'react'
 import { Button, TextInput } from '@istic-ui/react'
 import { createRoute, Link } from '@tanstack/react-router'
 import { PublicRoutes } from '@shared/layouts'
 import logo from '@assets/login-logo.svg'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm, Controller } from 'react-hook-form'
+import { useAuth } from '@shared/authentication/context'
+import { useContext } from 'react'
+import { ToastContext } from '@shared/context'
+import { router } from '@settings/tanstack-router'
+
+const ForgetFormSchema = z
+  .object({
+    password: z.string().min(8, 'Senha precisa ter pelo menos 8 caracteres'),
+    confirmPassword: z
+      .string()
+      .min(8, 'Senha precisa ter pelo menos 8 caracteres'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'As senhas não coincidem',
+    path: ['confirmPassword'],
+  })
+
+export type ForgetFormType = z.infer<typeof ForgetFormSchema>
 
 function ChangePassword() {
+  const { showToast } = useContext(ToastContext)
+  const { changePassword } = useAuth()
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ForgetFormType>({
+    resolver: zodResolver(ForgetFormSchema),
+    defaultValues: {
+      password: '',
+      confirmPassword: '',
+    },
+  })
+
+  const onSubmit = (data: ForgetFormType) => {
+    changePassword &&
+      changePassword(localStorage.getItem('token') || '', data.password)
+        .then(() => {
+          localStorage.removeItem('token')
+          showToast({
+            type: 'success',
+            message: 'Token inserido com sucesso',
+          })
+          router.navigate({ to: '/' })
+        })
+        .catch((error) => {
+          showToast({
+            type: 'error',
+            title: 'Algo deu errado',
+            message: 'Volte a tela de login e solicite novamente',
+          })
+
+          if (error.response.status === 400) {
+            localStorage.removeItem('token')
+          }
+
+          console.error(error)
+        })
+  }
+
   return (
     <div className="w-full md:w-[608px] p-12">
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-4">
             <span className="flex flex-col">
@@ -27,30 +88,62 @@ function ChangePassword() {
               <div className="w-10 aspect-square rounded-full flex items-center justify-center border-2 border-black text-white bg-black text-bold">
                 &#x2713;
               </div>
+
               <div>Código de Verificação</div>
             </div>
             <span className="flex items-center gap-2 text-gray-500 text-bold">
               -
             </span>
             <div className="flex items-center gap-2">
-              <div className="w-10 aspect-square rounded-full flex items-center justify-center border-2 border-gray-400 ">
-                2
+              <div className="w-10 aspect-square rounded-full flex items-center justify-center border-2 border-black text-white bg-black text-bold">
+                &#x2713;
               </div>
+
               <div>Crie sua Nova Senha</div>
             </div>
           </div>
           <div className="flex flex-col gap-4">
-            <TextInput
-              label="Senha"
-              placeholder="Digite sua senha"
-              type="password"
+            <Controller
+              name="password"
+              control={control}
+              render={({ field }) => (
+                <TextInput
+                  {...field}
+                  label="Senha"
+                  placeholder="Digite sua senha"
+                  type="password"
+                  error={
+                    errors.password && {
+                      description: errors.password.message,
+                    }
+                  }
+                />
+              )}
             />
-            <TextInput
-              label="Senha Repetido"
-              placeholder="Repita sua senha"
-              type="password"
+
+            <Controller
+              name="confirmPassword"
+              control={control}
+              render={({ field }) => (
+                <TextInput
+                  {...field}
+                  label="Senha Repetido"
+                  placeholder="Repita sua senha"
+                  type="password"
+                  error={
+                    errors.confirmPassword && {
+                      description: errors.confirmPassword.message,
+                    }
+                  }
+                />
+              )}
             />
-            <Button style={{ backgroundColor: '#212529' }} label="Enviar" />
+
+            <Button
+              style={{ backgroundColor: '#212529' }}
+              label="Enviar"
+              type="submit"
+            />
           </div>
 
           <div className="flex flex-col gap-4 text-center">

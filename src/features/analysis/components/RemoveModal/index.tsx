@@ -1,4 +1,4 @@
-// // import { ExerciseItem, useDeleteExercise } from '@features/exercises/services'
+
 // import ConfirmModal from '@shared/components/ConfirmModal'
 
 // interface RemoveExerciseModalProps {

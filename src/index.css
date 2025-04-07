@@ -27,6 +27,7 @@ body,
 
 body {
   background-color: #f7f8f9;
+  overflow: hidden;
 }
 
 .private-layout-height {
@@ -47,3 +48,27 @@ body {
   border: 2px solid black;
 }
 
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #bdbdbd;
+  border-radius: 6px;
+  border: 3px solid #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+
+/*custom dropdown color delete*/
+#deleteOption{
+  color: #fc0606;
+}

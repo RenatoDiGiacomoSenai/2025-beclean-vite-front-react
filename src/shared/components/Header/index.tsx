@@ -16,11 +16,9 @@ function Header({ toggle }: Readonly<HeaderProps>) {
         <Logo />
       </div>
       <div className="flex items-center space-x-3">
-      
-          {menuItems.map((item) => (
-            <MenuItem key={item.to} {...item} />
-          ))}
-  
+        {menuItems.map((item) => (
+          <MenuItem key={item.to} {...item} />
+        ))}
       </div>
       <button
         className="md:hidden text-2xl text-brand-600"
